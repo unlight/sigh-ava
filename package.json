@@ -1,0 +1,26 @@
+{
+  "name": "sigh-ava",
+  "version": "0.0.1",
+  "description": "Adapt ava to work with sighjs",
+  "main": "index.js",
+  "scripts": {},
+  "peerDependencies": {
+    "ava": "*"
+  },
+  "dependencies": {
+    "sigh-core": "^0.11.8"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unlight/sigh-ava.git"
+  },
+  "keywords": [
+    "ava",
+    "sigh-plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/unlight/sigh-ava/issues"
+  },
+  "homepage": "https://github.com/unlight/sigh-ava#readme"
+}
