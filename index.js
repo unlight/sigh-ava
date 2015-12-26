@@ -42,7 +42,7 @@ module.exports = function(op, files, options) {
 				return failCount;
 			})
 			.catch(function(err) {
-				console.error(err.stack);
+				console.error(err.stack); // eslint-disable-line no-console
 				logger.exit(1);
 				return err;
 			});
