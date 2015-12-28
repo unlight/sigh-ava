@@ -14,17 +14,9 @@ var merge, glob, concat, write, env, pipeline;
 var ava;
 
 module.exports = function(pipelines) {
-
-	pipelines["test"] = [
-		// glob("test/*.js"),
-		pipeline({ activate: true }, "ava")
-	];
 	
 	pipelines.explicit.ava = [
-		ava(["tests/*.js"], {
-			reporter: {"verbose"}
-			serial: false
-		})
+		ava(["tests/*.js"])
 	]; 
 };
 ```
@@ -38,15 +30,34 @@ ava(files, options)
 * `files`  
 Glob patterns for test files.  
 Type: Array  
-Optional: Yes (default: `['test.js', 'test-*.js', 'test/*.js']`)
+Optional: Yes  
+Default: `['test.js', 'test-*.js', 'test/*.js']`
 
 * `options`  
 Options.  
 Type: Object  
 Optional: Yes  
 
-    * `serial` (boolean)  
+    * `serial`  
+    Type: Boolean  
+    Default: false  
     Represents ava's `--serial` option (run tests serially).
 
-    * `reporter` (enum<string&gt;)
-    Type of reporter. Available options are: verbose (default), tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
+    * `reporter`  
+    Type: Enum<string&gt;  
+    Default: verbose  
+    Type of reporter.  
+    Available options are: verbose, tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
+
+    * `batch`
+    Type: Boolean  
+    Default: true  
+    If watch mode is enabled (`-w`), only last changed files will be passed to ava.
+    In this case you need to define `glob` before `ava`:
+    ```js
+	pipelines['ava'] = [
+		glob('tests/*.js'),
+		ava([], {batch: true}),
+	];
+    ```
+

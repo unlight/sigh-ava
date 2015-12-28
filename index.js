@@ -9,7 +9,8 @@ var logger = new Logger();
 
 var defaults = {
 	serial: false,
-	reporter: "verbose"
+	reporter: "verbose",
+	batch: true
 };
 
 module.exports = function(op, files, options) {
@@ -49,6 +50,12 @@ module.exports = function(op, files, options) {
 	};
 
 	var stream = op.stream.flatMapLatest(function(events) {
+		if (options.batch) {
+			api.files = events.map(function(e) {
+				return e.path;
+			});
+			// console.log('api.files ', api.files);
+		}
 		return Bacon.fromPromise(avaProc().then(function(failCount) {
 			return failCount > 0 ? new Bacon.Error("ava: " + failCount + " test(s) failed") : events;
 		}));
