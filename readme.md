@@ -49,7 +49,7 @@ Optional: Yes
     Type of reporter.  
     Available options are: verbose, tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
 
-    * `batch`
+    * `batch`  
     Type: Boolean  
     Default: true  
     If watch mode is enabled (`-w`), only last changed files will be passed to ava.
@@ -60,4 +60,5 @@ Optional: Yes
 		ava([], {batch: true}),
 	];
     ```
+    But! There is an issue, glob will do unnecessary job by reading file content.
 
