@@ -1,64 +1,50 @@
-# sigh-ava
-Adapt ava to work with sighjs
+sigh-ava
+--------
+Adapt ava to work with sighjs.
 
-INSTALL
--------
+### INSTALL
 ```js
 npm install ava sigh-ava --save-dev
 ```
 
-EXAMPLE USAGE
--------------
+### EXAMPLE
 ```js
 var merge, glob, concat, write, env, pipeline;
+var ts;
 var ava;
 
 module.exports = function(pipelines) {
-	
-	pipelines.explicit.ava = [
-		ava(["tests/*.js"])
-	]; 
+
+    pipelines["build"] = [
+        glob({basePath: "src"}, "**/*.ts"),
+        ts(),
+        write("lib"),
+        ava({files: "test/*.js", source: "src/**/*.ts"})
+    ];
 };
 ```
 
-API
----
+### API
 ```js
-ava(files, options)
+ava(options)
 ```
+Running sigh with option -w launches ava in watch mode (option `watch`).
+
+### OPTIONS
 
 * `files`  
 Glob patterns for test files.  
 Type: Array  
-Optional: Yes  
 Default: `['test.js', 'test-*.js', 'test/*.js']`
 
-* `options`  
-Options.  
-Type: Object  
-Optional: Yes  
+* `reporter`  
+Type: Enum<string&gt;  
+Default: verbose  
+Type of reporter.  
+Available options are: verbose, tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
 
-    * `serial`  
-    Type: Boolean  
-    Default: false  
-    Represents ava's `--serial` option (run tests serially).
+* `source`  
+Type: Array<string&gt;  
+Pattern to match source files so tests can be re-run (Can be repeated)
 
-    * `reporter`  
-    Type: Enum<string&gt;  
-    Default: verbose  
-    Type of reporter.  
-    Available options are: verbose, tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
-
-    * `batch`  
-    Type: Boolean  
-    Default: true  
-    If watch mode is enabled (`-w`), only last changed files will be passed to ava.
-    In this case you need to define `glob` before `ava`:
-    ```js
-	pipelines['ava'] = [
-		glob('tests/*.js'),
-		ava([], {batch: true}),
-	];
-    ```
-    But! There is an issue, glob will do unnecessary job by reading file content.
-
+See other options at [sindresorhus/ava#cli](https://github.com/sindresorhus/ava#cli)

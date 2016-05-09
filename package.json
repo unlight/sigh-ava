@@ -1,14 +1,14 @@
 {
   "name": "sigh-ava",
-  "version": "0.0.2",
+  "version": "0.1.4",
   "description": "Adapt ava to work with sighjs",
   "main": "index.js",
   "scripts": {},
   "peerDependencies": {
-    "ava": "*"
+    "ava": "0.14.0"
   },
   "dependencies": {
-    "sigh-core": "^0.11.8"
+    "sigh-core": "0.11.10"
   },
   "license": "ISC",
   "repository": {
