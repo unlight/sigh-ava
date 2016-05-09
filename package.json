@@ -1,6 +1,6 @@
 {
   "name": "sigh-ava",
-  "version": "0.0.3",
+  "version": "0.1.4",
   "description": "Adapt ava to work with sighjs",
   "main": "index.js",
   "scripts": {},
