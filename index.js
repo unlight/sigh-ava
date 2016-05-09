@@ -3,38 +3,40 @@
 var log = require("sigh-core").log;
 var Bacon = require("sigh-core").Bacon;
 var Api = require("ava/api");
-var reporter = require("ava/lib/reporters/verbose");
+var Reporter = require("ava/lib/reporters/verbose");
 var Logger = require("ava/lib/logger");
-var logger = new Logger();
 
 var defaults = {
 	serial: false,
 	reporter: "verbose",
-	batch: true
+	batch: false
 };
 
 module.exports = function(op, files, options) {
 
 	var isWatchMode = op.watch;
 	options = Object.assign({}, defaults, options || {});
-	var api = new Api(files, options);
+	
 
+	var api = new Api(options);
 	try {
-		reporter = require("ava/lib/reporters/" + options.reporter);
+		Reporter = require("ava/lib/reporters/" + options.reporter);
 	} catch (e) {
 		log("Invalid option reporter (" + options.reporter + "), using default (verbose)");
 	}
-
-	logger.api = api;
-	logger.use(reporter());
-
-	api.on("test", logger.test);
-	api.on("error", logger.unhandledError);
+	var reporter = Reporter();
+	reporter.api = api;
+	var logger = new Logger(reporter);
+	logger.start();
+	api.on('test', logger.test);
+	api.on('error', logger.unhandledError);
+	api.on('stdout', logger.stdout);
+	api.on('stderr', logger.stderr);
 
 	var avaProc = function() {
-		logger.start();
-		return api.run()
-			.then(function() {
+		console.log('files ' , files);
+		return api.run(files)
+			.then(function () {
 				logger.finish();
 				var failCount = api.failCount + api.rejectionCount + api.exceptionCount;
 				if (!isWatchMode) {
@@ -42,19 +44,37 @@ module.exports = function(op, files, options) {
 				}
 				return failCount;
 			})
-			.catch(function(err) {
-				console.error(err.stack); // eslint-disable-line no-console
-				logger.exit(1);
-				return err;
+			.catch(function (err) {
+				// console.error(err.stack); // eslint-disable-line no-console
+				// logger.exit(1);
+				// return err;
+				// Don't swallow exceptions. Note that any expected error should already
+				// have been logged.
+				setImmediate(function () {
+					throw err;
+				});
 			});
 	};
 
+	// try {
+	// 	var watcher = new Watcher(logger, api, files, arrify(cli.flags.source));
+	// 	watcher.observeStdin(process.stdin);
+	// } catch (err) {
+	// 	if (err.name === 'AvaError') {
+	// 		// An AvaError may be thrown if chokidar is not installed. Log it nicely.
+	// 		console.log('  ' + colors.error(figures.cross) + ' ' + err.message);
+	// 		logger.exit(1);
+	// 	} else {
+	// 		// Rethrow so it becomes an uncaught exception.
+	// 		throw err;
+	// 	}
+	// }
+
 	var stream = op.stream.flatMapLatest(function(events) {
 		if (options.batch) {
-			api.files = events.map(function(e) {
+			files = events.map(function(e) {
 				return e.path;
 			});
-			// console.log('api.files ', api.files);
 		}
 		return Bacon.fromPromise(avaProc().then(function(failCount) {
 			return failCount > 0 ? new Bacon.Error("ava: " + failCount + " test(s) failed") : events;
