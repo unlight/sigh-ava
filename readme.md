@@ -37,17 +37,14 @@ Running sigh with option -w launches ava in watch mode (option `watch`).
 
 * `files`  
 Glob patterns for test files.  
-Type: Array  
-Default: `['test.js', 'test-*.js', 'test/*.js']`
-
-* `reporter`  
-Type: Enum<string&gt;  
-Default: verbose  
-Type of reporter.  
-Available options are: verbose, tap, mini. See [ava/lib/reporters](https://github.com/sindresorhus/ava/tree/master/lib/reporters).
+Type: string  
+Default: `test.js test-*.js`
 
 * `source`  
 Type: Array<string&gt;  
 Pattern to match source files so tests can be re-run (Can be repeated)
 
-See other options at [sindresorhus/ava#cli](https://github.com/sindresorhus/ava#cli)
+See other options at [avajs/ava#cli](https://github.com/avajs/ava#cli)
+
+### TODO
+- Bacon.Error
