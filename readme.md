@@ -45,6 +45,3 @@ Type: Array<string&gt;
 Pattern to match source files so tests can be re-run (Can be repeated)
 
 See other options at [avajs/ava#cli](https://github.com/avajs/ava#cli)
-
-### TODO
-- Bacon.Error

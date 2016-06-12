@@ -5,6 +5,9 @@ const avaCli = require.resolve("ava/cli.js");
 const Bacon = require("sigh-core").Bacon;
 const spawn = require("child_process").spawn;
 const _ = require("lodash");
+const figures = require("figures");
+const beeper = require("beeper");
+const stripColor = require("strip-color");
 
 const defaults = {};
 
@@ -23,6 +26,12 @@ module.exports = function(op, options) {
 	var proc = spawn("node", procArgs);
 	proc.stderr.pipe(process.stdout);
 	if (op.watch) {
+		proc.stderr.on("data", b => {
+			var s = _.trim(stripColor(b.toString()));
+			if (s.indexOf(figures.cross) === 0) {
+				beeper();
+			}
+		});
 		return op.stream;
 	}
 	return op.stream.flatMapLatest(events => {
