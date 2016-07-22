@@ -1,11 +1,11 @@
 {
   "name": "sigh-ava",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Adapt ava to work with sighjs",
   "main": "index.js",
   "scripts": {},
   "peerDependencies": {
-    "ava": "0.14.0",
+    "ava": "0.X",
     "lodash": ">3"
   },
   "dependencies": {
