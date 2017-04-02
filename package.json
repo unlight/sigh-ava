@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "beeper": "^1.1.0",
-    "figures": "^1.7.0",
+    "figures": "^2.0.0",
     "sigh-core": "0.11.14",
     "strip-color": "^0.1.0"
   },
