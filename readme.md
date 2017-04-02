@@ -1,5 +1,7 @@
 sigh-ava
 --------
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/unlight/sigh-ava.svg)](https://greenkeeper.io/)
 Adapt ava to work with sighjs.
 
 ### INSTALL
